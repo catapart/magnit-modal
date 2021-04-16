@@ -12,7 +12,7 @@ A zero-dependency, vanilla javascript (es6) modal web component.
 ```
 
 ## demo
-see the demo in action, and inspect it in the dev tools for code examples.
+see the [demo in action](https://catapart.github.io/magnit-modal/), and inspect it in the dev tools for code examples.
 
 ## project
 `MagnitModalComponent` is ~25KB unminified, uncompressed and unoptimized. It is intended as a simple drop-in component that can be used to quick-start a UI while being versitile and accessible. With a single line to import, you can create fully styled and themed modals for displaying errors, or handling modal form content.
