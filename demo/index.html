@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Magnit Modal Demo</title>
+    
+    <style>
+        html {width: 100%; height: 100vh; overflow: hidden; padding: 0; margin: 0;}
+        body {width: 100%; height: 100%; padding: 0; margin: 0; font-family: 'Open Sans', sans-serif; overflow: auto; }
+        main {margin: 0 auto; width: max-content; max-width: 65ch;}
+        article {margin: 2em 0;}
+        button{margin-bottom: 1em; min-width:100px;}
+        section .field { display: block; margin-bottom: 1em; }
+        section.themes .custom-settings .field { display: flex; align-items: center;}
+        section.themes .custom-settings .field .title { margin-right: 1em;text-align: right; flex: 140px 0 1; }
+
+        magnit-modal form .field { display: flex; align-items: center; margin-bottom: 1em; }
+        magnit-modal form .field .title { flex-basis: 5ch; flex-grow: 0; text-align: right; margin-right: 1em; }
+        magnit-modal form .field .content { flex: 1; display: flex; }
+        magnit-modal form .field .content input { flex: 1; }
+        magnit-modal form > .messages { color: red; }
+    </style>
+
+    <script defer type="module">
+        import MagnitModalComponent from './magnit-modal.component.min.js';
+    </script>
+</head>
+
+<body>
+    <main>
+        <article>
+            <header>
+                <h1>Magnit Modal Demo</h1>
+                <div class="description">
+                    <p>A zero-dependency, vanilla javascript (es6) modal web component.</p>
+                    <p><small>Code examples can be found in the dev console by inspecting the script tags in each section.</small></p>
+                </div>
+            </header>
+            <hr />
+            <section class="simple">
+                <h2>Simple Modal</h2>
+                <p>A classic example</p>
+                <button class="open">Open Modal</button>
+                <script type="module" defer>
+                    const $section = document.querySelector('article section.simple');
+                    $section.$openButton = $section.querySelector('button.open');
+
+                    const $modal = document.querySelector('magnit-modal.simple');
+                    $modal.$detail = $modal.querySelector('.detail');
+                    $section.$openButton.addEventListener('click', simple_openButton_onClick);
+
+
+                    function simple_openButton_onClick(event)
+                    {
+                        $modal.open();
+                    }
+                </script>
+            </section>
+            <hr />
+            <section class="themes">
+                <h2>Modal Themes</h2>
+                <p>A small group of themes included in the component for status messaging. Also, simple css variables to customize the theme.</p>
+                <ul>
+                    <li><button class="default">Default</button></li>
+                    <li><button class="info">Info</button></li>
+                    <li><button class="success">Success</button></li>
+                    <li><button class="warning">Warning</button></li>
+                    <li><button class="error">Error</button></li>
+                    <li>
+                        <div class="custom-settings">
+                            <header>Custom</header>
+                            <ul>
+                                <li>
+                                    <label class="field primary">
+                                        <span class="title">Primary Color</span>
+                                        <span class="content"><input type="color" value="#5655cd" /></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="field background">
+                                        <span class="title">Background Color</span>
+                                        <span class="content"><input type="color" value="#d5d4f8" /></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="field font">
+                                        <span class="title">Font Color</span>
+                                        <span class="content"><input type="color" value="#393939" /></span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="custom">Custom</button>
+                    </li>
+                </ul>
+                <script type="module" defer>
+                    const $section = document.querySelector('article section.themes');
+                    $section.$defaultButton = $section.querySelector('button.default');
+                    $section.$infoButton = $section.querySelector('button.info');
+                    $section.$successButton = $section.querySelector('button.success');
+                    $section.$warningButton = $section.querySelector('button.warning');
+                    $section.$errorButton = $section.querySelector('button.error');
+                    $section.$customButton = $section.querySelector('button.custom');
+                    $section.$customPrimary = $section.querySelector('.field.primary input');
+                    $section.$customBackground = $section.querySelector('.field.background input');
+                    $section.$customFont = $section.querySelector('.field.font input');
+
+                    const $modal = document.querySelector('magnit-modal.themes');
+                    $modal.$themeName_heading = $modal.querySelector('.heading .theme-name');
+                    $modal.$themeName_body = $modal.querySelector('.detail .theme-name');
+
+                    $section.$defaultButton.addEventListener('click', modal_themes_button_onClick);
+                    $section.$infoButton.addEventListener('click', modal_themes_button_onClick);
+                    $section.$successButton.addEventListener('click', modal_themes_button_onClick);
+                    $section.$warningButton.addEventListener('click', modal_themes_button_onClick);
+                    $section.$errorButton.addEventListener('click', modal_themes_button_onClick);
+                    $section.$customButton.addEventListener('click', modal_themes_button_onClick);
+
+
+                    function modal_themes_button_onClick(event)
+                    {
+                        $modal.style.removeProperty('--primary-color');
+                        $modal.style.removeProperty('--background-color');
+                        $modal.style.removeProperty('--font-color');
+                        $modal.classList.remove('info', 'success', 'warning', 'error');
+
+                        let themeName = "Default";
+                        switch(event.currentTarget)
+                        {
+                            case $section.$defaultButton:
+                                break;
+                            case $section.$infoButton:
+                                themeName = "Info";
+                                $modal.classList.add('info');
+                                break;
+                            case $section.$successButton:
+                                themeName = "Success";
+                                $modal.classList.add('success');
+                                break;
+                            case $section.$warningButton:
+                                themeName = "Warning";
+                                $modal.classList.add('warning');
+                                break;
+                            case $section.$errorButton:
+                                themeName = "Error";
+                                $modal.classList.add('error');
+                                break;
+                            case $section.$customButton:
+                                themeName = "Custom";
+                                $modal.classList.remove('info', 'success', 'warning', 'error');
+                                $modal.style.setProperty('--primary-color', $section.$customPrimary.value);
+                                $modal.style.setProperty('--background-color', $section.$customBackground.value);
+                                $modal.style.setProperty('--font-color', $section.$customFont.value);
+                                break;
+                        }
+                        $modal.$themeName_heading.textContent = themeName;
+                        $modal.$themeName_body.textContent = themeName;
+                        $modal.open();
+                    }
+                </script>
+            </section>
+            <hr />
+            <section class="ask">
+                <h2>Ask Modal</h2>
+                <div class="simple-choice">
+                    <h3>Get Selected Choice</h3>
+                    <p>Await the <code>ask()</code> method to get the method of closing as a result.</p>
+                    <button class="open">Open modal with Ask</button>
+                    <div class="result">
+                        <strong class="title">Choice:</strong>
+                        <span class="value"></span>
+                    </div>
+                </div>
+                <div class="error">
+                    <h3>Prevent Close on Error</h3>
+                    <p>Pass in a callback function into the <code>ask(myCallback)</code> method to validate whether or not a modal will be allowed to close.</p>
+                    <label class="field">
+                        <span class="title">Set a custom error message:</span>
+                        <span class="content"><input type="text" value="There is no try!" /></span>
+                    </label>
+                    <button class="open">Ask and Prevent Close on Error</button>
+                    <div class="result">
+                        <strong class="title">Choice:</strong>
+                        <span class="value"></span>
+                    </div>
+                </div>
+                <script type="module" defer>
+                    const $section = document.querySelector('article section.ask');
+                    $section.$simpleChoiceButton = $section.querySelector('.simple-choice button.open');
+                    $section.$simpleChoiceResultValue = $section.querySelector('.simple-choice .result .value');
+                    $section.$errorButton = $section.querySelector('.error button.open');
+                    $section.$errorMessageInput = $section.querySelector('.error .field input');
+                    $section.$errorResultValue = $section.querySelector('.error .result .value');
+
+                    const $choiceModal = document.querySelector('magnit-modal.choice');
+                    const $askModal = document.querySelector('magnit-modal.ask');
+                    $askModal.$status = $askModal.querySelector('.status');
+
+                    $section.$simpleChoiceButton.addEventListener('click', choice_openButton_onClick);
+                    $section.$errorButton.addEventListener('click', ask_openButton_onClick);
+
+
+                    async function choice_openButton_onClick(event)
+                    {
+                        // await the ask method to get an element returned;
+                        // this element identifies how the modal was closed;
+                        // either a choice button, a close control, or the shade.
+                        const $choice = await $choiceModal.ask();
+                        console.log($choice);
+                        $section.$simpleChoiceResultValue.textContent = $choice.textContent;
+                    }
+                    async function ask_openButton_onClick(event)
+                    {
+                        $askModal.$status.textContent = "";
+
+                        // pass in a function to the ask method and that result of that
+                        // function will determine if the modal can close or not.
+                        const $choice = await $askModal.ask(async ($choice) =>
+                        {
+                            if($choice.classList.contains('close'))
+                            {
+                                $askModal.$status.textContent = "Please select a choice below.";
+                                return false; // we can catch the close button as a choice without letting it close the modal.
+                            }
+
+                            if($choice.classList.contains('try'))
+                            {
+                                $askModal.$status.textContent = $section.$errorMessageInput.value;
+                                return false; // prevent the modal from closing
+                            }
+                            return true; // allow the modal to close
+                        });
+                        console.log($choice);
+                        $section.$errorResultValue.textContent = $choice.textContent;
+                    }
+                </script>
+            </section>
+            <hr />
+            <section class="nested">
+                <h2>Nested Modals</h2>
+                <p>One modal opening another, and interacting with the second modal's choice.</p>
+                <button class="open">Open Modal</button>
+                <script type="module" defer>                    
+                    const $section = document.querySelector('article section.nested');
+                    $section.$openButton = $section.querySelector('button.open');
+
+                    const $choiceModal = document.querySelector('magnit-modal.choice');
+                    const $nestedModal = document.querySelector('magnit-modal.nested');
+                    $nestedModal.$choice = $nestedModal.querySelector('.content .result .value');
+
+                    $section.$openButton.addEventListener('click', modal_nested_openButton_onClick);
+
+                    async function modal_nested_openButton_onClick(event)
+                    {
+                        const $choice = await $nestedModal.ask(async ($selectedChoice) =>
+                        {
+                            if($selectedChoice.classList.contains('open-modal'))
+                            {
+                                const $nestedChoice = await $choiceModal.ask();
+                                $nestedModal.$choice.textContent = $nestedChoice.textContent;
+                                return false;
+                            }
+                            return true;
+                        });
+                        
+                    }
+                </script>
+            </section>
+            <hr />
+            <section class="dynamic">
+                <h2>Dynamic Message</h2>
+                <p>Set the content of the modal dynamically.</p>
+                <div>
+                    <textarea class="message" rows="7" style="width:65ch;">This message will be displayed in the modal!</textarea>
+                </div>
+                <button class="open">Open Modal with My Message</button>
+                <script type="module" defer>
+
+                    const $section = document.querySelector('article section.dynamic');
+                    $section.$message = $section.querySelector('textarea.message');
+                    $section.$openButton = $section.querySelector('button.open');
+                    $section.$openButton.addEventListener('click', modal_dynamic_openButton_onClick);
+
+                    const $simpleModal = document.querySelector('magnit-modal.simple');
+                    $simpleModal.$detail = $simpleModal.querySelector('.detail');
+
+
+                    function modal_dynamic_openButton_onClick(event)
+                    {
+                        $simpleModal.$detail.textContent = $section.$message.value;
+                        $simpleModal.open();
+                    }
+                </script>
+            </section>
+            <hr />
+            <section class="form">
+                <h2>Open Form Modal</h2>
+                <p>Await the <code>submitForm()</code> helper method to submit forms and await their result before closing the modal.</p>
+                <button class="open">Open Modal</button>
+                <script type="module" defer>
+                    const $section = document.querySelector('article section.form');
+                    $section.$openButton = $section.querySelector('button.open');
+
+                    const $formModal = document.querySelector('magnit-modal.form');
+                    $formModal.$form = $formModal.querySelector('form');
+                    $formModal.$form.$messages = $formModal.$form.querySelector('.messages');
+                    $section.$openButton.addEventListener('click', modal_form_openButton_onClick);
+
+
+                    async function modal_form_openButton_onClick(event)
+                    {
+                        // reset form
+                        $formModal.$form.reset();
+                        while($formModal.$form.$messages.lastChild != null)
+                        {
+                            $formModal.$form.$messages.firstChild.remove();
+                        }
+
+                        // use canCloseCallback to submit the form and validate.
+                        await $formModal.ask(async ($choice) =>
+                        {
+                            if($choice.classList.contains('close') || $choice.classList.contains('cancel'))
+                            {
+                                return true; // close the modal without submitting the form
+                            }
+
+                            try
+                            {
+                                await $formModal.submitForm($formModal.$form, formModal_onSubmit);
+                                if($formModal.$form.formStatus.success == true)
+                                {
+                                    return true; // allow the modal to close
+                                }
+
+                            }
+                            catch(error)
+                            {
+                                // no need to log - submit form already handles it;
+                                // though logging could be added here if it made more sense;
+                                // form validation failures also reject to a string value of 'invalid'
+                                // so you could test (error == 'invalid') and then handle
+                                // validation messages here
+                            }
+                            return false;
+                        });
+                    }
+
+                    function formModal_onSubmit(event)
+                    {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        try 
+                        {
+                            $formModal.$form.formStatus = { success: false };
+                            const formData = new FormData($formModal.$form);
+                            if(formData.get('name').toLowerCase() != 'bob')
+                            {
+                                throw new Error("The Name field value must be \"Bob\".");
+                            }
+                            $formModal.$form.formStatus.success = true;
+                            console.log("Form sucessfully submitted with this data:");
+                            console.table(Object.fromEntries(formData));
+                        }
+                        catch (exception)
+                        {
+                            console.error(exception);
+                            while($formModal.$form.$messages.lastChild != null)
+                            {
+                                $formModal.$form.$messages.firstChild.remove();
+                            }
+                            AddMessage($formModal.$form, exception.message);
+                        }
+                        finally 
+                        {
+                            return false;
+                        }
+                    }
+                    function AddMessage($form, message, isError = true)
+                    {
+                        const $message = document.createElement('li');
+                        $message.classList.add('message');
+                        if(isError == true)
+                        {
+                            $message.classList.add('error');
+                            $message.setAttribute('role', 'alert');
+                        }
+                        $message.textContent = message;
+                        $form.$messages.appendChild($message);
+                    }
+                </script>
+            </section>
+            <hr />
+            <footer>
+                <p>For more information and the source code, check out <a href="">the repo</a>.</p>
+            </footer>
+        </article>
+    </main>
+    
+    <!-- Modals -->
+    <magnit-modal class="simple" style="display:none;" use-shade="true" type="message">
+        <div slot="content">
+            <div class="icon-container">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.142 2l5.858 5.858v8.284l-5.858 5.858h-8.284l-5.858-5.858v-8.284l5.858-5.858h8.284zm.829-2h-9.942l-7.029 7.029v9.941l7.029 7.03h9.941l7.03-7.029v-9.942l-7.029-7.029zm-5.971 6h2v8h-2v-8zm1 12.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>
+            </div>
+            <div class="message">
+                <h5 class="heading">Simple Modal</h5>
+                <p class="detail">This is a simple message modal.</p>
+            </div>
+        </div>
+    </magnit-modal>
+
+    <magnit-modal class="themes" style="display:none;" use-shade="true" type="message">
+        <div slot="content">
+            <div class="icon-container">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.142 2l5.858 5.858v8.284l-5.858 5.858h-8.284l-5.858-5.858v-8.284l5.858-5.858h8.284zm.829-2h-9.942l-7.029 7.029v9.941l7.029 7.03h9.941l7.03-7.029v-9.942l-7.029-7.029zm-5.971 6h2v8h-2v-8zm1 12.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>
+            </div>
+            <div class="message">
+                <h5 class="heading"><span class="theme-name"></span> Theme</h5>
+                <p class="detail">This is a message using the <span class="theme-name"></span> theme.</p>
+            </div>
+        </div>
+    </magnit-modal>
+
+    <magnit-modal class="nested" style="display:none;">
+        <div slot="content">
+            <h5 class="heading">Open the modal and select one</h5>
+            <div class="result">
+                <span class="title">Choice:</span>
+                <span class="value"></span>
+            </div>
+        </div>
+        <ul slot="choices">
+            <li><button class="close" type="button">Close</button></li>
+            <li><button class="open-modal" type="button">Open Modal</button></li>
+        </ul>
+    </magnit-modal>
+
+    <magnit-modal class="choice" style="display:none;" use-shade="true">
+        <div slot="content">
+            <h5 class="heading">Select One</h5>
+        </div>
+        <ul slot="choices">
+            <li><button class="a" type="button">A</button></li>
+            <li><button class="b" type="button">B</button></li>
+            <li><button class="c" type="button">C</button></li>
+        </ul>
+    </magnit-modal>
+
+    <magnit-modal class="ask" style="display:none;" use-shade="true">
+        <div slot="content">
+            <div class="message">
+                <h5 class="heading">Only different in your mind.</h5>
+                <p class="detail">You must unlearn what you have learned.</p>
+            </div>
+            <div class="status"></div>
+        </div>
+        <ul slot="choices">
+            <li><button class="cancel" type="button">Do Not</button></li>
+            <li><button class="try" type="button">Try</button></li>
+            <li><button class="ok" type="button">Do</button></li>
+        </ul>
+    </magnit-modal>
+
+    <magnit-modal class="form" type="dialog" style="display:none;">
+        <svg slot="title-icon" class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm7 14h-5v5h-4v-5h-5v-4h5v-5h4v5h5v4z"/></svg>
+        <span slot="title">My Form</span>
+        <div slot="content">
+            <form>
+                <div>
+                    <label class="field name">
+                        <strong class="title"><small>Name</small></strong>
+                        <span class="content">
+                            <input placeholder="Dan Smith" type="text" name="name" required />
+                        </span>
+                    </label>
+                </div>
+                <label class="field age">
+                    <strong class="title"><small>Age</small></strong>
+                    <span class="content">
+                        <input placeholder="24" type="number" name="age" required />
+                    </span>
+                </label>
+                <fieldset class="options">
+                    <legend>Options</legend>
+                    <ul>
+                        <li><label><span class="content"><input type="checkbox" name="options" value="Monday" /></span><span class="title">Monday</span></label></li>
+                        <li><label><span class="content"><input type="checkbox" name="options" value="Tuesday" /></span><span class="title">Tuesday</span></label></li>
+                        <li><label><span class="content"><input type="checkbox" name="options" value="Wednesday" /></span><span class="title">Wednesday</span></label></li>
+                        <li><label><span class="content"><input type="checkbox" name="options" value="Thursday" checked="checked" /></span><span class="title">Thursday</span></label></li>
+                        <li><label><span class="content"><input type="checkbox" name="options" value="Friday" /></span><span class="title">Friday</span></label></li>
+                    </ul>
+                </fieldset>
+                <ul class="messages">
+                    <li class="message example">This is an example message. It shouldn't appear when the page loads, but can be used to test styling.</li>
+                    <li class="message error">Error Test.</li>
+                    <li class="message success">Success Test.</li>
+                </ul>
+            </form>
+        </div>
+        <ul slot="choices">
+            <li><button class="cancel" type="button">Cancel</button></li>
+            <li><button class="save" type="button">Submit</button></li>
+        </ul>
+    </magnit-modal>
+</body>
+
+</html>
